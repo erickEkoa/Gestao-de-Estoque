@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or 'Sistema de Gestão de Ativos TI' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    {% if session.get('usuario') %}
+    <div class="layout">
+        <div class="sidebar">
+            <h2>Ativos TI</h2>
+            <div class="muted" style="color:#d1d5db; margin-bottom: 14px;">Usuário: {{ session['usuario']['nome'] }}</div>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('ativos') }}">Ativos</a>
+            <a href="{{ url_for('cadastros') }}">Cadastros auxiliares</a>
+            <a href="{{ url_for('exportar_csv') }}">Exportar CSV</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </div>
+    {% endif %}
+    <div class="content">
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            {% if not session.get('usuario') %}<div class="login-wrap">{% endif %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% if not session.get('usuario') %}</div>{% endif %}
+        {% endfor %}
+        {% block conteudo %}{% endblock %}
+    </div>
+    {% if session.get('usuario') %}</div>{% endif %}
+</body>
+</html>

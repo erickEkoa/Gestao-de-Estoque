@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div class="login-wrap">
+    <div class="card">
+        <h1>Sistema de Gestão de Ativos TI</h1>
+        <p class="muted">Faça login para continuar</p>
+        <form method="post" enctype="multipart/form-data">
+            <div style="margin-bottom:12px;">
+                <label>Usuário</label>
+                <input type="text" name="login" placeholder="Usuário">
+            </div>
+            <div style="margin-bottom:12px;">
+                <label>Senha</label>
+                <input type="password" name="senha" placeholder="Senha">
+            </div>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

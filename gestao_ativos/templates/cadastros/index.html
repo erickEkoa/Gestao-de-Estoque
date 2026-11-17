@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div class="topbar">
+    <div>
+        <h1 style="margin:0;">Cadastros auxiliares</h1>
+        <div class="muted">Gerencie setores, colaboradores, marcas, modelos e tipos</div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="card">
+        <h3>Novo setor</h3>
+        <form method="post">
+            <input type="hidden" name="tipo_form" value="setor">
+            <label>Nome</label><input name="nome" required>
+            <div style="margin-top:12px;"><button type="submit">Salvar</button></div>
+        </form>
+        <hr>
+        <table>
+            {% for item in setores %}
+            <tr>
+                <td>{{ item.nome }}</td>
+                <td style="width:190px;">
+                    <div class="actions">
+                        <a class="btn btn-warning" href="{{ url_for('editar_setor_web', item_id=item.id) }}">Editar</a>
+                        <form method="post" action="{{ url_for('excluir_setor_web', item_id=item.id) }}" onsubmit="return confirm('Excluir setor?');">
+                            <button class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}<tr><td colspan="2">Nenhum setor.</td></tr>{% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Novo colaborador</h3>
+        <form method="post">
+            <input type="hidden" name="tipo_form" value="colaborador">
+            <label>Nome</label><input name="nome" required>
+            <label style="margin-top:12px;">E-mail</label><input name="email">
+            <div style="margin-top:12px;"><button type="submit">Salvar</button></div>
+        </form>
+        <hr>
+        <table>
+            {% for item in colaboradores %}
+            <tr>
+                <td>{{ item.nome }}{% if item.email %}<br><span class="muted">{{ item.email }}</span>{% endif %}</td>
+                <td style="width:190px;">
+                    <div class="actions">
+                        <a class="btn btn-warning" href="{{ url_for('editar_colaborador_web', item_id=item.id) }}">Editar</a>
+                        <form method="post" action="{{ url_for('excluir_colaborador_web', item_id=item.id) }}" onsubmit="return confirm('Excluir colaborador?');">
+                            <button class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}<tr><td colspan="2">Nenhum colaborador.</td></tr>{% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Nova marca</h3>
+        <form method="post">
+            <input type="hidden" name="tipo_form" value="marca">
+            <label>Nome</label><input name="nome" required>
+            <div style="margin-top:12px;"><button type="submit">Salvar</button></div>
+        </form>
+        <hr>
+        <table>
+            {% for item in marcas %}
+            <tr>
+                <td>{{ item.nome }}</td>
+                <td style="width:190px;">
+                    <div class="actions">
+                        <a class="btn btn-warning" href="{{ url_for('editar_marca_web', item_id=item.id) }}">Editar</a>
+                        <form method="post" action="{{ url_for('excluir_marca_web', item_id=item.id) }}" onsubmit="return confirm('Excluir marca?');">
+                            <button class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}<tr><td colspan="2">Nenhuma marca.</td></tr>{% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Novo modelo</h3>
+        <form method="post">
+            <input type="hidden" name="tipo_form" value="modelo">
+            <label>Nome</label><input name="nome" required>
+            <div style="margin-top:12px;"><button type="submit">Salvar</button></div>
+        </form>
+        <hr>
+        <table>
+            {% for item in modelos %}
+            <tr>
+                <td>{{ item.nome }}</td>
+                <td style="width:190px;">
+                    <div class="actions">
+                        <a class="btn btn-warning" href="{{ url_for('editar_modelo_web', item_id=item.id) }}">Editar</a>
+                        <form method="post" action="{{ url_for('excluir_modelo_web', item_id=item.id) }}" onsubmit="return confirm('Excluir modelo?');">
+                            <button class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}<tr><td colspan="2">Nenhum modelo.</td></tr>{% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Novo tipo de equipamento</h3>
+        <form method="post">
+            <input type="hidden" name="tipo_form" value="tipo">
+            <label>Nome</label><input name="nome" required>
+            <div style="margin-top:12px;"><button type="submit">Salvar</button></div>
+        </form>
+        <hr>
+        <table>
+            {% for item in tipos %}
+            <tr>
+                <td>{{ item.nome }}</td>
+                <td style="width:190px;">
+                    <div class="actions">
+                        <a class="btn btn-warning" href="{{ url_for('editar_tipo_web', item_id=item.id) }}">Editar</a>
+                        <form method="post" action="{{ url_for('excluir_tipo_web', item_id=item.id) }}" onsubmit="return confirm('Excluir tipo?');">
+                            <button class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}<tr><td colspan="2">Nenhum tipo.</td></tr>{% endfor %}
+        </table>
+    </div>
+{% endblock %}

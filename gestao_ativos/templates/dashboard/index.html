@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div class="topbar">
+    <div>
+        <h1 style="margin:0;">Dashboard</h1>
+        <div class="muted">Versão web do seu sistema desktop</div>
+    </div>
+</div>
+<div class="grid-3">
+    <div class="card"><h3>Total de ativos</h3><div style="font-size:32px; font-weight:bold;">{{ ativos_lista|length }}</div></div>
+    <div class="card"><h3>Colaboradores</h3><div style="font-size:32px; font-weight:bold;">{{ total_colaboradores }}</div></div>
+    <div class="card"><h3>Setores</h3><div style="font-size:32px; font-weight:bold;">{{ total_setores }}</div></div>
+</div>
+<div class="card">
+    <h3>Últimos ativos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Data</th><th>Nº Série</th><th>Descrição</th><th>Colaborador</th><th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ativo in ativos_lista[:10] %}
+        <tr>
+            <td>{{ ativo.id }}</td><td>{{ ativo.data_cadastro }}</td>
+            <td>{{ ativo.numero_serie }}</td><td>{{ ativo.descricao }}</td>
+            <td>{{ ativo.colaborador }}</td><td>{{ ativo.status }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">Nenhum ativo cadastrado.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

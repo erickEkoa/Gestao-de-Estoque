@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div class="topbar">
+    <div>
+        <h1 style="margin:0;">Editar ativo</h1>
+        <div class="muted">Atualize as informações do ativo</div>
+    </div>
+</div>
+<div class="card">
+    <form method="post" enctype="multipart/form-data">
+        <div class="grid">
+            <div><label>Número de Série</label><input name="numero_serie" value="{{ ativo.numero_serie }}" required></div>
+            <div><label>Descrição</label><input name="descricao" value="{{ ativo.descricao }}" required></div>
+            <div>
+                <label>Marca</label>
+                <select name="marca_id">
+                    <option value="">Selecione</option>
+                    {% for item in marcas %}<option value="{{ item.id }}" {% if ativo.marca_id == item.id %}selected{% endif %}>{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Modelo</label>
+                <select name="modelo_id">
+                    <option value="">Selecione</option>
+                    {% for item in modelos %}<option value="{{ item.id }}" {% if ativo.modelo_id == item.id %}selected{% endif %}>{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Tipo de Equipamento</label>
+                <select name="tipo_equipamento_id">
+                    <option value="">Selecione</option>
+                    {% for item in tipos %}<option value="{{ item.id }}" {% if ativo.tipo_equipamento_id == item.id %}selected{% endif %}>{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Colaborador</label>
+                <select name="colaborador_id">
+                    <option value="">Selecione</option>
+                    {% for item in colaboradores %}<option value="{{ item.id }}" {% if ativo.colaborador_id == item.id %}selected{% endif %}>{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Setor</label>
+                <select name="setor_id">
+                    <option value="">Selecione</option>
+                    {% for item in setores %}<option value="{{ item.id }}" {% if ativo.setor_id == item.id %}selected{% endif %}>{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Status</label>
+                <select name="status">
+                    {% for s in ['Em uso', 'Disponível', 'Manutenção', 'Baixado'] %}
+                    <option value="{{ s }}" {% if ativo.status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div style="margin-top:12px;">
+            <label>Observação</label>
+            <textarea name="observacao">{{ ativo.observacao }}</textarea>
+        </div>
+        <div style="margin-top:12px;">
+            <label>Tipo do anexo</label>
+            <input name="tipo_anexo" list="tipos_anexo" placeholder="Ex.: termo, foto do equipamento, nota fiscal, laudo">
+            <datalist id="tipos_anexo">
+                <option value="Termo">
+                <option value="Foto do equipamento">
+                <option value="Nota fiscal">
+                <option value="Laudo">
+                <option value="Contrato">
+                <option value="Checklist">
+            </datalist>
+        </div>
+        <div style="margin-top:12px;">
+            <label>Adicionar novos anexos</label>
+            <input type="file" name="anexos" multiple accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.txt,.webp">
+            <div class="muted">O tipo informado acima será salvo para os arquivos enviados agora.</div>
+        </div>
+        <div class="actions" style="margin-top:12px;">
+            <button type="submit">Salvar alterações</button>
+            <a class="btn btn-secondary" href="{{ url_for('ativos') }}">Voltar</a>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Anexos do ativo</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo do anexo</th>
+                <th>Arquivo</th>
+                <th>Tipo do arquivo</th>
+                <th>Tamanho</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for anexo in anexos %}
+            <tr>
+                <td>{{ anexo.tipo_anexo or '-' }}</td>
+                <td>{{ anexo.nome_original }}</td>
+                <td>{{ anexo.tipo_arquivo or '-' }}</td>
+                <td>{{ anexo.tamanho_bytes }} bytes</td>
+                <td>{{ anexo.criado_em }}</td>
+                <td>
+                    <div class="actions">
+                        <a class="btn" href="{{ url_for('baixar_anexo_ativo', anexo_id=anexo.id) }}">Baixar</a>
+                        <form method="post" action="{{ url_for('excluir_anexo_ativo_web', anexo_id=anexo.id) }}" onsubmit="return confirm('Deseja excluir este anexo?');">
+                            <button class="btn btn-danger" type="submit">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6">Nenhum anexo cadastrado para este ativo.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

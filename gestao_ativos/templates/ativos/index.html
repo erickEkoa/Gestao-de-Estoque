@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div class="topbar">
+    <div>
+        <h1 style="margin:0;">Ativos</h1>
+        <div class="muted">Cadastro, busca, edição e exclusão</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Novo ativo</h3>
+    <form method="post" enctype="multipart/form-data">
+        <div class="grid">
+            <div><label>Número de Série</label><input name="numero_serie" required></div>
+            <div><label>Descrição</label><input name="descricao" required></div>
+            <div>
+                <label>Marca</label>
+                <select name="marca_id">
+                    <option value="">Selecione</option>
+                    {% for item in marcas %}<option value="{{ item.id }}">{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Modelo</label>
+                <select name="modelo_id">
+                    <option value="">Selecione</option>
+                    {% for item in modelos %}<option value="{{ item.id }}">{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Tipo de Equipamento</label>
+                <select name="tipo_equipamento_id">
+                    <option value="">Selecione</option>
+                    {% for item in tipos %}<option value="{{ item.id }}">{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Colaborador</label>
+                <select name="colaborador_id">
+                    <option value="">Selecione</option>
+                    {% for item in colaboradores %}<option value="{{ item.id }}">{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Setor</label>
+                <select name="setor_id">
+                    <option value="">Selecione</option>
+                    {% for item in setores %}<option value="{{ item.id }}">{{ item.nome }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>Status</label>
+                <select name="status">
+                    <option>Em uso</option>
+                    <option>Disponível</option>
+                    <option>Manutenção</option>
+                    <option>Baixado</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top:12px;">
+            <label>Observação</label>
+            <textarea name="observacao"></textarea>
+        </div>
+        <div style="margin-top:12px;">
+            <label>Tipo do anexo</label>
+            <input name="tipo_anexo" list="tipos_anexo" placeholder="Ex.: termo, foto do equipamento, nota fiscal, laudo">
+            <datalist id="tipos_anexo">
+                <option value="Termo">
+                <option value="Foto do equipamento">
+                <option value="Nota fiscal">
+                <option value="Laudo">
+                <option value="Contrato">
+                <option value="Checklist">
+            </datalist>
+        </div>
+        <div style="margin-top:12px;">
+            <label>Anexos</label>
+            <input type="file" name="anexos" multiple accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.txt,.webp">
+            <div class="muted">O tipo informado acima será salvo para os arquivos enviados neste cadastro.</div>
+        </div>
+        <div style="margin-top:12px;"><button type="submit">Cadastrar ativo</button></div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Filtros</h3>
+    <form method="get">
+        <div class="grid">
+            <div><label>Número de série</label><input name="numero_serie" value="{{ filtro_numero_serie }}"></div>
+            <div><label>Modelo</label><input name="modelo" value="{{ filtro_modelo }}"></div>
+            <div><label>Colaborador</label><input name="colaborador" value="{{ filtro_colaborador }}"></div>
+            <div><label>Tipo</label><input name="tipo" value="{{ filtro_tipo }}"></div>
+        </div>
+        <div class="actions" style="margin-top:12px;">
+            <button type="submit">Buscar</button>
+            <a class="btn btn-secondary" href="{{ url_for('ativos') }}">Limpar</a>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Lista de ativos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data</th>
+                <th>Nº Série</th>
+                <th>Descrição</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Tipo</th>
+                <th>Colaborador</th>
+                <th>Setor</th>
+                <th>Status</th>
+                <th>Observação</th>
+                <th>Anexos</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in dados %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.data_cadastro }}</td>
+                <td>{{ item.numero_serie }}</td>
+                <td>{{ item.descricao }}</td>
+                <td>{{ item.marca }}</td>
+                <td>{{ item.modelo }}</td>
+                <td>{{ item.tipo_equipamento }}</td>
+                <td>{{ item.colaborador }}</td>
+                <td>{{ item.setor }}</td>
+                <td>{{ item.status }}</td>
+                <td>{{ item.observacao }}</td>
+                <td>{{ item.total_anexos }}</td>
+                <td>
+                    <div class="actions">
+                        <a class="btn btn-warning" href="{{ url_for('editar_ativo_web', ativo_id=item.id) }}">Editar</a>
+                        <form method="post" action="{{ url_for('excluir_ativo_web', ativo_id=item.id) }}" onsubmit="return confirm('Deseja excluir este ativo?');">
+                            <button class="btn btn-danger" type="submit">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="13">Nenhum ativo encontrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
